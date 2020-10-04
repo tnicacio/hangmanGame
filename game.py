@@ -15,9 +15,8 @@ class Game:
         self._spaces = '-' * len(self._word)
 
     def run_game(self):
-        first_pass = True
-        while first_pass or input("Do you want to play again? (Y/N) ").upper() == "Y":
-            first_pass = False
+        self.new_round()
+        while input("Do you want to play again? (Y/N) ").upper() == "Y":
             self.new_round()
 
     def choose_word(self):
