@@ -15,21 +15,23 @@ class Game:
         self._spaces = '-' * len(self._word)
 
     def run_game(self):
-        self.new_round()
-        while input("Do you want to play again? (Y/N) ").upper() == "Y":
-            self.reset()
+        first_pass = True
+        while first_pass or input("Do you want to play again? (Y/N) ").upper() == "Y":
+            first_pass = False
             self.new_round()
 
     def choose_word(self):
         return random.choice(self._words_list).upper()
 
+    @property
+    def game_over(self):
+        return self._player.won or self._player.health == 0
+
     def new_round(self):
         print('''Let's Begin!''')
-        if self._player.health == 0:
-            self.reset()
         self.show_hangman_on_console()
 
-        while not self._player.won and self._player.health > 0:
+        while not self.game_over:
             guess = input("Please enter with a word or letter: ").upper()
             self.check_guess(guess)
             self.show_hangman_on_console()
@@ -38,6 +40,7 @@ class Game:
             print('Congratulations! You rock!')
         else:
             print(f'Oh, it happens. You cannot win everytime ;/ The word was {self._word}.\nTry again!')
+        self.reset()
 
     def check_guess(self, guess):
         if len(guess) == 1 and guess.isalpha():
